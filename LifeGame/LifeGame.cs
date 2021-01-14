@@ -8,7 +8,7 @@
     {
         private const string _title = "Game of life";
         private const uint width = 800;
-        private const uint height = 800;
+        private const uint height = 600;
         private readonly Random rnd = new Random();
         private RectangleShape _worldShape = new RectangleShape(new SFML.System.Vector2f(width,height));
         private Image _image = new Image(width, height);
@@ -17,10 +17,8 @@
         public LifeGame() : base(_title, width, height)
         {
             _worldShape.Texture = new Texture(_image);
-            InitRandom(25);
+            InitRandom(10);
         }
-
-
 
         protected override void Draw(RenderWindow window)
         {
@@ -30,7 +28,6 @@
         protected override void Update(float elapsedTime)
         {
             //Т.к. клеток дохуя, не будем никак использовать время
-
             for(int i = 0; i < height; i++)
             {
                 for(int j = 0; j < width; j++)
@@ -40,11 +37,11 @@
 
                     if(_nextCellsBuffer[index])
                     {
-                        _image.SetPixel((uint)i, (uint)j, Color.White);
+                        _image.SetPixel((uint)j, (uint)i, Color.White);
                     }
                     else
                     {
-                        _image.SetPixel((uint)i, (uint)j, Color.Black);
+                        _image.SetPixel((uint)j, (uint)i, Color.Black);
                     }
 
                 }
