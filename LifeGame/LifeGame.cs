@@ -2,19 +2,18 @@
 {
     using SFML.Graphics;
     using System;
-    using System.Linq;
 
     public class LifeGame : SfmlApplication
     {
         private const string _title = "Game of life";
-        private const uint width = 800;
-        private const uint height = 600;
-        private readonly Random rnd = new Random();
-        private RectangleShape _worldShape = new RectangleShape(new SFML.System.Vector2f(width,height));
-        private Image _image = new Image(width, height);
-        private bool[] _cells = new bool[width * height];
-        private bool[] _nextCellsBuffer = new bool[width * height];
-        public LifeGame() : base(_title, width, height)
+        private const uint _width = 800;
+        private const uint _height = 600;
+        private readonly Random _rnd = new Random();
+        private RectangleShape _worldShape = new RectangleShape(new SFML.System.Vector2f(_width,_height));
+        private Image _image = new Image(_width, _height);
+        private bool[] _cells = new bool[_width * _height];
+        private bool[] _nextCellsBuffer = new bool[_width * _height];
+        public LifeGame() : base(_title, _width, _height)
         {
             _worldShape.Texture = new Texture(_image);
             InitRandom(10);
@@ -28,16 +27,16 @@
         protected override void Update(float elapsedTime)
         {
             //Т.к. клеток дохуя, не будем никак использовать время
-            for(int i = 0; i < height; i++)
+            for(int i = 0; i < _height; i++)
             {
-                for(int j = 0; j < width; j++)
+                for(int j = 0; j < _width; j++)
                 {
                     var index = GetCellInex(i, j);
                     _nextCellsBuffer[index] = LifeGameRulles(i, j);
 
                     if(_nextCellsBuffer[index])
                     {
-                        _image.SetPixel((uint)j, (uint)i, Color.White);
+                        _image.SetPixel((uint)j, (uint)i, Color.Green);
                     }
                     else
                     {
@@ -68,20 +67,21 @@
         }
 
         private bool GetCell(int row, int col) => _cells[GetCellInex(row, col)];
-        private int GetCellInex(int row, int col) => (int)(row * width + col);
+        private int GetCellInex(int row, int col) => (int)(row * _width + col);
         private void InitRandom(uint fillFactor)
         {
             if (fillFactor > 100) fillFactor = 100;
             for (int i = 0; i < _cells.Length; i++)
-                _cells[i] = fillFactor - rnd.Next(0, 100) >= 0;
+                _cells[i] = fillFactor - _rnd.Next(0, 100) >= 0;
         }
         private int CountNeighbors(int row, int col)
         {
+            //Если нужно сделать мир зацикленным - можно поменять правила тута
             int startRow = row - 1 < 0 ? 0 : row - 1;
-            int endRow = row + 1 > height - 1 ? (int)height - 1 : row + 1;
+            int endRow = row + 1 > _height - 1 ? (int)_height - 1 : row + 1;
 
             int startCol = col - 1 < 0 ? 0 : col - 1;
-            int endCol = col + 1 > width - 1 ? (int)width - 1 : col + 1;
+            int endCol = col + 1 > _width - 1 ? (int)_width - 1 : col + 1;
 
             int n = 0;
             for(int i = startRow; i <= endRow; i++)
